@@ -1,61 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { Box, Card, CardHeader, Page } from "grommet";
+import React, { useState, useEffect, useCallback } from "react";
+import { Box, Grid, Page } from "grommet";
 
 import { useEth } from "@contexts/EthContext";
 
 import ProjectContractJson from "../../contracts/ProjectContract.json";
 import { CONTRACT_ADDRESSES } from "../../contract-constants";
+import Header from "@components/Header";
+import Card from "@components/Card";
 
 const ProjectsListPage = () => {
   // Hooks
   const { state } = useEth();
 
   // States
-  const [projectContract, setProjectContract] = useState();
   const [projects, setProjects] = useState([]);
 
   // Data
   const userAccount = state.accounts?.[0];
-  console.warn("projectContract", projectContract);
   console.warn("projects", projects);
   console.warn("state", state);
   console.warn("useraccount", userAccount);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
+    const projectContract = new state.web3.eth.Contract(
+      ProjectContractJson.abi,
+      CONTRACT_ADDRESSES.project
+    );
+
     await projectContract.methods
       .getProjects()
       .call()
       .then((pList) => {
         setProjects(pList);
       });
-  };
+  }, [state]);
 
   // Effects
   useEffect(() => {
     if (state.web3?.eth) {
-      const projectContract = new state.web3.eth.Contract(
-        ProjectContractJson.abi,
-        CONTRACT_ADDRESSES.project
-      );
-      setProjectContract(projectContract);
-    }
-  }, [state]);
-
-  useEffect(() => {
-    if (projectContract?.methods) {
       fetchProjects();
     }
-  }, [projectContract]);
+  }, [state, fetchProjects]);
 
   return (
     <Page>
-      Pl page Count: {projects.length}
-      <Box pad="large" gap="medium">
-        {projects.map((project) => (
-          <Card>
-            <CardHeader>{project.projectName}</CardHeader>
-          </Card>
-        ))}
+      <Header />
+      <Box pad="large">
+        <Grid columns="medium" gap="small">
+          {projects.map((project) => (
+            <Card
+              title={project.projectName}
+              description="hello"
+              toUrl={`/projects/${project.projectId}`}
+            />
+          ))}
+        </Grid>
       </Box>
     </Page>
   );
