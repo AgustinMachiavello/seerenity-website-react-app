@@ -10,6 +10,7 @@ import {
   Text
 } from "grommet";
 import { useParams } from "react-router-dom";
+import { convert } from "ethereumjs-units";
 
 import { useEth } from "@contexts/EthContext";
 
@@ -31,7 +32,7 @@ const BuyBonusPage = () => {
   // Data
   const userAccount = state.accounts?.[0];
   const tonPrice = project?.creditPrice || 0;
-  const price = tonsToBuy * tonPrice;
+  const price = tonPrice * tonsToBuy;
   let { projectId } = useParams();
 
   const fetchProject = useCallback(
@@ -63,15 +64,15 @@ const BuyBonusPage = () => {
         ProjectContractJson.abi,
         CONTRACT_ADDRESSES.project
       );
-      const creditPriceInEth = convertEurosToEth(tonsToBuy);
-      const creditPriceInWei =
-        state?.web3?.utils?.toWei(creditPriceInEth.toString(), "ether") || 0;
-      const totalWeiRequired = state.web3.utils
-        .toBN(tonsToBuy)
-        .mul(state.web3.utils.toBN(creditPriceInWei));
+      const creditPriceInEth = convertEurosToEth(price);
+      const totalWeiRequired = convert(
+        creditPriceInEth.toString(),
+        "eth",
+        "wei"
+      );
       await projectContract.methods.purchaseCredits(projectId, tonsToBuy).send({
         from: userAccount,
-        value: totalWeiRequired // Cantidad de Ether que se enviará (en Wei)
+        value: totalWeiRequired
       });
     } catch (error) {
       console.error("Error al comprar créditos:", error);
@@ -88,7 +89,8 @@ const BuyBonusPage = () => {
           <Text>Available credits: {project?.creditsAvailable}</Text>
         </Box>
         <Box>
-          You are buying: {tonsToBuy} for {price.toFixed(2).toLocaleString()}
+          You are buying: {tonsToBuy} for €{price.toFixed(2).toLocaleString()}{" "}
+          (ETH: {convertEurosToEth(price)})
         </Box>
         <Box>
           <Form
