@@ -30,4 +30,16 @@ contract ProjectContract {
 
         return projectList;
     }
+
+    // Función para obtener detalles de un proyecto por su ID
+    function getProjectDetails(
+        uint256 projectId
+    ) public view returns (Project memory) {
+        for (uint256 i = 1; i <= projectCount; i++) {
+            if (projects[i].projectId == projectId) {
+                return projects[i];
+            }
+        }
+        revert("Proyecto not found");
+    }
 }

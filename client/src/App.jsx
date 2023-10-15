@@ -4,6 +4,7 @@ import { Grommet } from "grommet";
 import { EthProvider } from "./contexts/EthContext";
 import Home from "./containers/Home";
 import ProjectsListPage from "./containers/ProjectsListPage";
+import ProjectDetailsPage from "@containers/ProjectPage";
 
 const theme = {
   name: "my theme",
@@ -105,6 +106,10 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route
+                path="projects/:projectId"
+                element={<ProjectDetailsPage />}
+              />
               <Route path="projects" element={<ProjectsListPage />} />
             </Routes>
           </Router>
