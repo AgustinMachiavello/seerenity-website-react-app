@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, Grid, Heading, Page } from "grommet";
+import { Box, RoutedButton, Grid, Heading, Page, Text } from "grommet";
 import { useParams } from "react-router-dom";
 
 import { useEth } from "@contexts/EthContext";
@@ -19,17 +19,17 @@ const ProjectDetailsPage = () => {
 
   // Data
   const userAccount = state.accounts?.[0];
+
   let { projectId } = useParams();
 
   const fetchProject = useCallback(
     async (id) => {
       const projectContract = new state.web3.eth.Contract(
         ProjectContractJson.abi,
-        "0xf49e9a7afbac9a706FeB2Ad986d8E3a916C6734B"
+        CONTRACT_ADDRESSES.project
       );
-
       await projectContract.methods
-        .getProjectDetails(1)
+        .getProject(1)
         .call()
         .then((p) => setProject(p));
     },
@@ -47,8 +47,13 @@ const ProjectDetailsPage = () => {
     <Page>
       <Header />
       <Box pad="large">
-        <Heading level={2}>{project?.projectName}</Heading>
+        <Heading level={2}>{project?.projectName || "Not found"}</Heading>
+        <Text>{project?.description}</Text>
       </Box>
+      <RoutedButton
+        label="Comprar"
+        path={`/projects/${projectId}/buy`}
+      ></RoutedButton>
     </Page>
   );
 };

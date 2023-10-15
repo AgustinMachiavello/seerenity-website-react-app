@@ -5,6 +5,7 @@ import { EthProvider } from "./contexts/EthContext";
 import Home from "./containers/Home";
 import ProjectsListPage from "./containers/ProjectsListPage";
 import ProjectDetailsPage from "@containers/ProjectPage";
+import BuyBonusPage from "@containers/BuyBonusPage";
 
 const theme = {
   name: "my theme",
@@ -106,6 +107,10 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route
+                path="projects/:projectId/buy"
+                element={<BuyBonusPage />}
+              />
               <Route
                 path="projects/:projectId"
                 element={<ProjectDetailsPage />}
