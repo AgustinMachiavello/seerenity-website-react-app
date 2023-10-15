@@ -13,33 +13,9 @@ contract ProjectContract {
     }
 
     uint256 public projectCount; // Contador de proyectos
-    // string public projectName;
-    // string public description;
-    // uint256 yearlyTonsRemovalPotential;
-    // uint256 creditsAvailable;
-    // uint256 creditPrice;
-    // address ownerAddress;
 
     mapping(uint256 => Project) public projects; // Mapeo de proyectos por su ID
     mapping(address => uint256) public userCredits; // Créditos por usuario
-
-    // constructor(
-    //     string memory _projectName,
-    //     string memory _description,
-    //     uint256 _yearlyTonsRemovalPotential,
-    //     uint256 _creditsAvailable,
-    //     uint256 _creditPrice,
-    //     address _ownerAddress
-    // ) {
-    //     projectCount = 0;
-
-    //     projectName = _projectName;
-    //     description = _description;
-    //     yearlyTonsRemovalPotential = _yearlyTonsRemovalPotential;
-    //     creditsAvailable = _creditsAvailable;
-    //     creditPrice = _creditPrice;
-    //     ownerAddress = _ownerAddress;
-    // }
 
     // Constructor
     constructor() {
@@ -77,12 +53,7 @@ contract ProjectContract {
     function getProject(
         uint256 projectId
     ) public view returns (Project memory) {
-        for (uint256 i = 1; i <= projectCount; i++) {
-            if (projects[i].projectId == projectId) {
-                return projects[i];
-            }
-        }
-        revert("Proyecto not found");
+        return projects[projectId];
     }
 
     function getProjects() public view returns (Project[] memory) {
@@ -98,20 +69,12 @@ contract ProjectContract {
     function purchaseCredits(uint256 projectId, uint256 amount) public payable {
         Project storage project = projects[projectId];
 
-        for (uint256 i = 1; i <= projectCount; i++) {
-            if (projects[i].projectId == projectId) {
-                project = projects[i];
-            }
-        }
         require(msg.value > 0, "Value must be greater than 0");
 
         require(
             project.creditsAvailable >= amount,
             "Project does not have enough credits left"
         );
-
-        uint256 totalPrice = project.creditPrice * amount; // Precio total en Ether
-        require(msg.value >= totalPrice, "Insufficient ETHs to buy");
 
         // Transferir Ether al proyecto
         address payable projectOwner = payable(project.ownerAddress);
