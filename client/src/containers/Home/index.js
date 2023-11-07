@@ -36,7 +36,6 @@ const renderPanelHeader = (title, active) => (
 const Banner = styled.div`
   height: 80vh;
   width: 100vw;
-  background-color: red;
   background-image: url(${bannerImage});
   background-repeat: no-repeat;
   background-position: center;
@@ -112,10 +111,10 @@ const Home = () => {
   const [activeIndex, setActiveIndex] = useState([0]);
   return (
     <Box direction="column">
-      <Header></Header>
       {/* Banner */}
       <Box>
         <Banner>
+          <Header theme="dark"></Header>
           <Grid
             columns={{
               count: 2,
