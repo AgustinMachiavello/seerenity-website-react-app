@@ -7,6 +7,10 @@ import ProjectsListPage from "./containers/ProjectsListPage";
 import ProjectDetailsPage from "@containers/ProjectPage";
 import BuyBonusPage from "@containers/BuyBonusPage";
 
+/**
+ * Notita: El código es inmantenible
+ */
+
 const theme = {
   name: "my theme",
   rounding: 4,
