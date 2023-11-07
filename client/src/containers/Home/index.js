@@ -1,4 +1,6 @@
 import {
+  Accordion,
+  AccordionPanel,
   Box,
   Button,
   Card,
@@ -18,6 +20,18 @@ import algaIcon from "../../assets/images/alga-icon-1.png";
 import descentralized1 from "../../assets/images/descentralized.png";
 import Header from "@components/Header";
 import { Next, Key, Target, Inspect } from "grommet-icons";
+import metamskLogo from "../../assets/images/assets_logo_metamask-removebg-preview.png";
+import { useState } from "react";
+import seerenityText from "../../assets/images/seerenity-text.png";
+
+const renderPanelHeader = (title, active) => (
+  <Box direction="row" align="center" pad="medium" gap="small">
+    <strong>
+      <Text>{title}</Text>
+    </strong>
+    <Text color="brand">{active ? "-" : "+"}</Text>
+  </Box>
+);
 
 const Banner = styled.div`
   height: 80vh;
@@ -50,7 +64,16 @@ const categories = [
   }
 ];
 
+const faqs = [
+  {
+    id: 1,
+    title: "Test",
+    description: "hello"
+  }
+];
+
 const Home = () => {
+  const [activeIndex, setActiveIndex] = useState([0]);
   return (
     <Box direction="column">
       <Header></Header>
@@ -92,7 +115,10 @@ const Home = () => {
       </Box>
       {/* Por qué */}
       <Box pad="large" background="brand">
-        <Heading>¿Por qué Seerenity?</Heading>
+        <Heading textAlign="center" style={{ maxWidth: "none" }}>
+          ¿Por qué Seerenity?
+        </Heading>
+
         <Box pad="medium"></Box>
         <Grid
           columns={{
@@ -111,6 +137,38 @@ const Home = () => {
             </Box>
           ))}
         </Grid>
+      </Box>
+      {/* FAQs */}
+      <Box pad="large">
+        <Heading level={2}>Preguntas frecuentes</Heading>
+        <Box pad="small"></Box>
+        <Accordion
+          activeIndex={activeIndex}
+          onActive={(newActiveIndex) => setActiveIndex(newActiveIndex)}
+        >
+          {faqs.map((f) => (
+            <AccordionPanel
+              header={renderPanelHeader(f.title, activeIndex.includes(0))}
+            >
+              <Box pad="medium" background="light-1">
+                <Text>{f.description}</Text>
+              </Box>
+            </AccordionPanel>
+          ))}
+        </Accordion>
+      </Box>
+      {/* Footer??? lol */}
+      <Box pad="large">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Image src={seerenityText} height={40} width="auto"></Image>
+          <Image src={metamskLogo} height={200}></Image>
+        </div>
       </Box>
     </Box>
   );
