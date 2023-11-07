@@ -66,9 +66,45 @@ const categories = [
 
 const faqs = [
   {
+    id: 2, // melapela
+    title: "¿Qué problemática intenta solventar Seerenity?",
+    description: (
+      <>
+        En las últimas décadas las emisiones de carbono se han disparado, no
+        solo por la combustión de combustibles fósiles sino por el cambio de uso
+        del suelo y la destrucción de hábitats que funcionan como sumideros de
+        carbono. Actualmente, aunque somos conscientes del daño que causa
+        nuestra forma de vida, las emisiones siguen incrementando. Es por eso
+        que ha nacido todo un sector dedicado a buscar soluciones para mitigar
+        estas emisiones y secuestrar un porcentaje del carbono que hay en la
+        atmósfera.
+      </>
+    )
+  },
+  {
     id: 1,
-    title: "Test",
-    description: "hello"
+    title: "¿Qué tipo de proyectos existen en Seerenity?",
+    description: (
+      <>
+        Nos hemos centrado en proyectos con <i>Posidonia oceanica</i>, una
+        fanerógama marina que forma praderas, ya que es el tipo de ecosistema
+        más común en la costa catalana.
+      </>
+    )
+  },
+  {
+    id: 2,
+    title: "¿Qué red de blockchain se utiliza?",
+    description: (
+      <>
+        La red que se ha decidido utilizar para la implementación de este
+        proyecto es <i>Polygon</i>, una red de capa dos la cual opera sobre la
+        cadena de bloques de Ethereum. Las redes de capa dos dan una solución a
+        la falta de escalabilidad de las redes principales y aportan un mayor
+        rendimiento. Además, ofrecen transacciones más rápidas, sin
+        congestionamiento y asequibles debido a sus tarifas de gas reducidas.
+      </>
+    )
   }
 ];
 
