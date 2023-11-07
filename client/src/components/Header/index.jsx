@@ -9,51 +9,22 @@ import {
   Header as HeaderGroomet,
   Menu,
   ResponsiveContext,
-  Image
+  Image,
+  Avatar,
+  Nav
 } from "grommet";
 
 const Header = ({}) => (
-  <HeaderGroomet
-    sticky="scrollup"
-    background="light-1"
-    pad="medium"
-    height="xsmall"
-  >
-    <Link to="/projects">
-      <Anchor
-        icon={<Image src={logo} fit="cover" height="64" />}
-        label="Seerenity"
-      />
-    </Link>
+  <HeaderGroomet background="brand" pad="large" style={{ height: "10vh" }}>
+    <Anchor
+      href="/"
+      label="Seerenity"
+      icon={<Image src={logo} fit="cover" height="64" />}
+    ></Anchor>
 
-    <ResponsiveContext.Consumer>
-      {(size) =>
-        size === "small" ? (
-          <Box justify="end">
-            <Menu
-              a11yTitle="Navigation Menu"
-              dropProps={{ align: { top: "bottom", right: "right" } }}
-              //   icon={<MenuIcon color="brand" />}
-              items={[
-                {
-                  label: <Box pad="small">Projects</Box>,
-                  href: "/projects"
-                },
-                {
-                  label: <Box pad="small">FAQs</Box>,
-                  href: "/faqs"
-                }
-              ]}
-            />
-          </Box>
-        ) : (
-          <Box justify="end" direction="row" gap="medium">
-            <Anchor href="/projects" label="Projects" />
-            <Anchor href="/faws" label="FAQs" />
-          </Box>
-        )
-      }
-    </ResponsiveContext.Consumer>
+    <Nav direction="row">
+      <Anchor label="Proyectos" href="/projects" />
+    </Nav>
   </HeaderGroomet>
 );
 
