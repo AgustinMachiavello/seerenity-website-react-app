@@ -19,13 +19,14 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import bannerImage from "../../assets/images/blue-blurred-1.jpg";
 import { convert } from "ethereumjs-units";
-
+import ethLogo from "../../assets/images/eth-logo-black.png";
 import { useEth } from "@contexts/EthContext";
 
 import ProjectContractJson from "../../contracts/ProjectContract.json";
 import { CONTRACT_ADDRESSES } from "../../contract-constants";
 import Header from "@components/Header";
 import Card from "@components/Card";
+import seaWeedGif from "../../assets/images/water-fish.gif";
 import galeria1 from "../../assets/images/mataro.jpeg";
 import galeria2 from "../../assets/images/mataero-2.jpeg";
 import galeria3 from "../../assets/images/mataro-3.jpeg";
@@ -69,6 +70,7 @@ const ProjectDetailsPage = () => {
   // States
   const [project, setProject] = useState();
   const [tonsToBuy, setTonsToBuy] = useState(1.0);
+  const [isSuccessfulBuy, setIsSuccessfulBuy] = useState(false);
   console.warn("project", project);
 
   // Data
@@ -104,10 +106,17 @@ const ProjectDetailsPage = () => {
         "eth",
         "wei"
       );
-      await projectContract.methods.purchaseCredits(projectId, tonsToBuy).send({
-        from: userAccount,
-        value: totalWeiRequired
-      });
+      await projectContract.methods
+        .purchaseCredits(projectId, tonsToBuy)
+        .send({
+          from: userAccount,
+          value: totalWeiRequired
+        })
+        .then((r) => {
+          if (r.status === true) {
+            setIsSuccessfulBuy(true);
+          }
+        });
     } catch (error) {
       console.error("Error al comprar créditos:", error);
     }
@@ -177,6 +186,97 @@ const ProjectDetailsPage = () => {
         </Grid>
       </Box>
 
+      {/* BUY */}
+      <Box pad="large">
+        <Box
+          pad="medium"
+          style={{
+            backgroundImage: `url(${blurredBuy})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            borderRadius: "20px"
+          }}
+        >
+          <Grid
+            columns={{
+              count: 2,
+              size: "auto"
+            }}
+          >
+            <div
+              style={{
+                backgroundImage: `url(${
+                  isSuccessfulBuy ? seaWeedGif : maresmeMap
+                })`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                height: 500,
+                width: 500,
+                borderRadius: "20px"
+              }}
+            ></div>
+            <Box>
+              {!isSuccessfulBuy && (
+                <div>
+                  <Heading>{project?.projectName}</Heading>
+                  <Heading level={6} style={{ maxWidth: "none" }}>
+                    {project?.ownerAddress}
+                  </Heading>
+                  <div style={{ marginTop: 20 }}></div>
+                  <Heading level={5}>1 crédito = 1 tonelada de Co2</Heading>
+                  <Heading level={3}>
+                    €{tonPrice} / <Image src={ethLogo} height={30}></Image>{" "}
+                    {convertEurosToEth(tonPrice).toFixed(4)} por crédito
+                  </Heading>
+                  <Heading level={3}></Heading>
+                  <Heading level={4}>
+                    Créditos disponibles: {project?.creditsAvailable}
+                  </Heading>
+                  <div style={{ marginTop: 40 }}></div>
+                  <Heading level={5}>Estás comprando:</Heading>
+                  <Text size="large">
+                    {tonsToBuy} crédito{tonsToBuy > 1 ? "s" : ""} por €
+                    {price.toFixed(2).toLocaleString()} |{" "}
+                    <Image src={ethLogo} height={30}></Image>{" "}
+                    {convertEurosToEth(price).toFixed(4)}
+                  </Text>
+                  <Box>
+                    <Form
+                      validate="blur"
+                      onReset={(event) => console.log(event)}
+                      onSubmit={({ value }) => console.log("Submit", value)}
+                    >
+                      <Box>
+                        <FormField>
+                          <RangeInput
+                            value={tonsToBuy}
+                            onChange={(e) =>
+                              setTonsToBuy(parseFloat(e.target.value))
+                            }
+                          ></RangeInput>
+                        </FormField>
+                      </Box>
+                    </Form>
+                  </Box>
+                  <Button
+                    primary
+                    label="Comprar"
+                    onClick={handlePurchaseCredits}
+                  ></Button>
+                </div>
+              )}
+              {isSuccessfulBuy && (
+                <Box direction="row">
+                  <Heading>¡Muchas gracias! 🐟 ❤️ 🎉</Heading>
+                </Box>
+              )}
+            </Box>
+          </Grid>
+        </Box>
+      </Box>
+
       <Box pad="large" background="brand">
         <Heading textAlign="center" style={{ maxWidth: "none" }}>
           Galería
@@ -198,76 +298,6 @@ const ProjectDetailsPage = () => {
               </Box>
             ))}
           </Carousel>
-        </Box>
-      </Box>
-
-      {/* BUY */}
-      <Box pad="large">
-        <Box
-          pad="medium"
-          style={{
-            backgroundImage: `url(${blurredBuy})`,
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            borderRadius: "20px"
-          }}
-        >
-          <Grid
-            columns={{
-              count: 2,
-              size: "auto"
-            }}
-          >
-            <div
-              style={{
-                backgroundImage: `url(${maresmeMap})`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                height: 500,
-                width: 500,
-                borderRadius: "20px"
-              }}
-            ></div>
-            <Box>
-              <Heading>{project?.projectName}</Heading>
-              <div style={{ marginTop: 20 }}></div>
-              <Heading level={3}>€{tonPrice} each 1ton</Heading>
-              <Heading level={4}>
-                Available credits: {project?.creditsAvailable}
-              </Heading>
-              <div style={{ marginTop: 20 }}></div>
-              <Text size="large">
-                You are buying: {tonsToBuy} for €
-                {price.toFixed(2).toLocaleString()} (ETH:{" "}
-                {convertEurosToEth(price)})
-              </Text>
-              <Box>
-                <Form
-                  validate="blur"
-                  onReset={(event) => console.log(event)}
-                  onSubmit={({ value }) => console.log("Submit", value)}
-                >
-                  <Box>
-                    <FormField>
-                      <RangeInput
-                        value={tonsToBuy}
-                        onChange={(e) =>
-                          setTonsToBuy(parseFloat(e.target.value))
-                        }
-                      ></RangeInput>
-                    </FormField>
-                  </Box>
-                </Form>
-              </Box>
-              <Button
-                primary
-                label="Comprar"
-                onClick={handlePurchaseCredits}
-              ></Button>
-            </Box>
-          </Grid>
         </Box>
       </Box>
     </Page>
