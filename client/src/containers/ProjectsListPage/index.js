@@ -10,6 +10,20 @@ import { CONTRACT_ADDRESSES } from "../../contract-constants";
 import Header from "@components/Header";
 import Card from "@components/Card";
 
+const PHOTO_URLS = [
+  "https://marilles.org/storage/media/2021/08/886/webimg-0043.jpg",
+  "https://www.elmundoecologico.es/wp-content/uploads/2015/06/replantar-posidonia-red-electrica-el-mundo-ecologico-3.jpg",
+  "https://aeolianpreservationfoundation.org/wp-content/uploads/2019/07/2-1.png",
+  "https://www.nationalgeographic.com.es/medio/2022/03/21/snorkel-entre-posidonia_6da9a130_800x533.jpg",
+  "https://cdn01.diarimes.com/uploads/imagenes/bajacalidad/2023/01/20/_7e36f83cea7b4946b30812d9b0cd3d92_884258fc.jpeg?6355a9b23f08179324a24ae1c122c249",
+  "https://s3.ppllstatics.com/ideal/www/multimedia/201807/14/media/cortadas/posidonia-oceanica-pradera-03-kEUB-U60349778694PfH-984x608@Ideal.jpg",
+  "https://www.balearia.com/documents/20142/24e92cc0-0cd1-a22f-1bfd-6466850a46f9",
+  "https://www.nationalgeographic.it/upload/ngi-hero/evidenza_12.jpg",
+  "https://www.nauticaydeportes.com/wp-content/uploads/2017/06/bigstock-underwater-image-of-aquatic-pl-49422542.jpg",
+  "https://i0.wp.com/www.favignana.biz/wp-content/uploads/2017/07/posidonia3.jpg",
+  "https://ibi.gsstatic.es/pitiusas/ibiza/2016/05/10/285786/red-electrica-imedea-replantaran-posidonia-talamanca.jpg"
+];
+
 const Banner = styled.div`
   width: 100vw;
   background-image: url(${bannerImage});
@@ -86,11 +100,12 @@ const ProjectsListPage = () => {
           }}
           gap="small"
         >
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <Card
               title={project.projectName}
               description={project.description}
               toUrl={`/projects/${project.projectId}`}
+              photoUrl={PHOTO_URLS[index]}
             />
           ))}
         </Grid>

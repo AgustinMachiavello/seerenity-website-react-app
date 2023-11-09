@@ -7,12 +7,14 @@ import {
   Heading,
   Paragraph
 } from "grommet";
+import styled from "styled-components";
 import React from "react";
 import { Link } from "react-router-dom";
 import seaweed from "../../assets/images/sea-weed-1.jpeg";
 import blurredGreen from "../../assets/images/blurred-green-2.jpg";
 
-import styled from "styled-components";
+// Ruta al directorio actual
+const PHOTOS_DIR = "../../assets/images/covers";
 
 const ContainerClickywabadoply = styled.div`
   cursor: pointer;
@@ -27,7 +29,7 @@ const ContainerClickywabadoply = styled.div`
   }
 `;
 
-const Card = ({ title, description, toUrl }) => {
+const Card = ({ title, description, toUrl, photoUrl }) => {
   return (
     <ContainerClickywabadoply onClick={() => (window.location.href = toUrl)}>
       <Box
@@ -42,14 +44,25 @@ const Card = ({ title, description, toUrl }) => {
         }}
         direction="column"
       >
-        <Image
-          src={seaweed}
+        {/* <Image
+          src={`${PHOTOS_DIR}/${photoName}.jpg`}
           height="240"
           fit="cover"
           style={{
             borderRadius: "19px 19px 0 0"
           }}
-        ></Image>
+        ></Image> */}
+        <div
+          style={{
+            height: "240px",
+            backgroundColor: "transparent",
+            backgroundImage: `url(${photoUrl})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            borderRadius: "19px 19px 0 0"
+          }}
+        ></div>
         <Box pad="medium">
           <Heading size="small" level={2}>
             {title}
